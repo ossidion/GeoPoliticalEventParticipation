@@ -41,5 +41,16 @@ namespace EventParticipation.Api.Services
                 }
             );
         }
+
+
+        public Task<Dictionary<string, int>> GetCountryParticipationCountAsync()
+        {
+            return Task.FromResult(GetCountryParticipationCounts());
+        }
+
+        public Task<Dictionary<string, EventReach>> GetEventParticipationReachAsync()
+        {
+            return Task.FromResult(GetEventParticipationReach());
+        }
     }
 }
