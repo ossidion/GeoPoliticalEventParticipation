@@ -1,6 +1,7 @@
 ﻿using EventParticipation.Api.Data;
 using EventParticipation.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using EventParticipation.Api.DTOs;
 
 namespace EventParticipation.Api.Services
 
@@ -20,32 +21,30 @@ namespace EventParticipation.Api.Services
             _context = context;
         }
 
-        public async Task<Dictionary<string, int>> GetCountryParticipationCountAsync()
+        public async Task<List<CountryParticipationDto>> GetCountryParticipationCountAsync()
         {
             return await _context.Participations
-                .Include(p => p.Country)
                 .GroupBy(p => p.Country.Name)
-                .ToDictionaryAsync(g => g.Key, g => g.Count());
+                .Select(g => new CountryParticipationDto
+                {
+                    Country = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
         }
 
 
-        public async Task<Dictionary<string, EventReach>> GetEventParticipationReachAsync()
+        public async Task<List<EventParticipationReachDto>> GetEventParticipationReachAsync()
         {
-            var participations = await _context.Participations
-                .Include(p => p.Country)
-                .Include(p => p.Organization)
-                .Include(participations => participations.Event)
-                .ToListAsync();
-
-            return participations
-                .GroupBy(participations => participations.Event.Name)
-                .ToDictionary(
-                g => g.Key,
-                g => new EventReach
+            return await _context.Participations
+                .GroupBy(p => p.Event.Name)
+                .Select(g => new EventParticipationReachDto
                 {
+                    Event = g.Key,
                     UniqueCountries = g.Select(p => p.Country.Name).Distinct().Count(),
                     UniqueOrganizations = g.Select(p => p.Organization.Name).Distinct().Count()
-                });
+                })
+                .ToListAsync();
         }
     }
 }

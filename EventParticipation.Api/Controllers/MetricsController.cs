@@ -19,14 +19,14 @@ namespace EventParticipation.Api.Controllers
         public async Task<IActionResult> GetCountryParticipation()
         {
             var result = await _metrics.GetCountryParticipationCountAsync();
-            return Ok(result);
+            return Ok(new { data = result });
         }
 
         [HttpGet("event-participation-reach")]
         public async Task<IActionResult> GetEventParticipationReach()
         {
             var result = await _metrics.GetEventParticipationReachAsync();
-            return Ok(result);
+            return Ok(new { data = result });
         }
     }
 }
