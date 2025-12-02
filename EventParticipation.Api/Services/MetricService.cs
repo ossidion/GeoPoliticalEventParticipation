@@ -5,6 +5,12 @@ using System.Linq;
 namespace EventParticipation.Api.Services
 
 {
+    public class EventReach
+    {
+        public int UniqueCountries { get; set; }
+        public int UniqueOrganizations { get; set; }
+    }
+
     public class MetricService
     {
         private readonly List<Participation> _participations;
@@ -19,6 +25,21 @@ namespace EventParticipation.Api.Services
             return _participations
                 .GroupBy(p => p.Country.Name)
                 .ToDictionary(g => g.Key, g => g.Count());
+        }
+
+
+        public Dictionary<string, EventReach> GetEventParticipationReach()
+        {
+            return _participations
+                .GroupBy(p => p.Event.Name)
+                .ToDictionary(
+                g => g.Key,
+                g => new EventReach
+                {
+                    UniqueCountries = g.Select(p => p.Country.Name).Distinct().Count(),
+                    UniqueOrganizations = g.Select(p => p.Organization.Name).Distinct().Count()
+                }
+            );
         }
     }
 }
