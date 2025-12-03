@@ -53,5 +53,19 @@ namespace EventParticipation.Tests.Services
             Assert.Equal(2, event3.UniqueOrganizations);
         }
 
+        [Fact]
+        public async Task GetCountryCollaborationScore_ReturnsCorrectScores()
+        {
+            var result = await _metricService.GetCountryCollaborationScoreAsync();
+
+            var uk = result.First(r => r.Country == "United Kingdom");
+            var france = result.First(r => r.Country == "France");
+            var germany = result.First(r => r.Country == "Germany");
+
+            Assert.Equal(1, uk.Score);
+            Assert.Equal(1, france.Score);
+            Assert.Equal(1, germany.Score);
+        }
+
     }
 }

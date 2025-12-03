@@ -43,6 +43,23 @@ namespace EventParticipation.Tests.Services
             return Task.FromResult(result);
         }
 
+        public Task<List<CountryCollaborationDto>> GetCountryCollaborationScoreAsync()
+        {
+            var result = _participations
+                .GroupBy(p => p.Country.Name)
+                .Select(g => new CountryCollaborationDto
+                {
+                    Country = g.Key,
+                    Score = g.Select(p => p.Organization.Id)   // select all org IDs
+                             .Distinct()                     // get unique IDs
+                             .Count() / (double)g.Count()   // divide by total participations
+                })
+                .ToList();
+
+            return Task.FromResult(result);
+        }
+
+
 
 
         // -------------------------------
@@ -59,6 +76,12 @@ namespace EventParticipation.Tests.Services
             public string Event { get; set; } = string.Empty;
             public int UniqueCountries { get; set; }
             public int UniqueOrganizations { get; set; }
+        }
+
+        public class CountryCollaborationDto
+        {
+            public string Country { get; set; } = string.Empty;
+            public double Score { get; set; }
         }
     }
 }
