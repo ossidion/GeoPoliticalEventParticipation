@@ -8,7 +8,7 @@ namespace EventParticipation.Api.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Country> Countries { get; set; }
-        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Organisation> Organizations { get; set; }
 
         public DbSet<Event> Events { get; set; }
         public DbSet<Participation> Participations { get; set; }

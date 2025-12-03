@@ -36,7 +36,7 @@ namespace EventParticipation.Tests.Services
                 {
                     Event = g.Key,
                     UniqueCountries = g.Select(p => p.Country.Name).Distinct().Count(),
-                    UniqueOrganizations = g.Select(p => p.Organization.Name).Distinct().Count()
+                    UniqueOrganizations = g.Select(p => p.Organisation.Name).Distinct().Count()
                 })
                 .ToList();
 
@@ -50,7 +50,7 @@ namespace EventParticipation.Tests.Services
                 .Select(g => new CountryCollaborationDto
                 {
                     Country = g.Key,
-                    Score = g.Select(p => p.Organization.Id)   // select all org IDs
+                    Score = g.Select(p => p.Organisation.Id)   // select all org IDs
                              .Distinct()                     // get unique IDs
                              .Count() / (double)g.Count()   // divide by total participations
                 })
@@ -58,6 +58,35 @@ namespace EventParticipation.Tests.Services
 
             return Task.FromResult(result);
         }
+
+        internal async Task<List<OrganisationInflucenceDto>> GetOrganisationInfluenceIndexAsync()
+        {
+            var result = _participations
+                .GroupBy(p => p.Organisation.Id)
+                .Select(g => new OrganisationInflucenceDto
+                {
+                    Organisation = g.First().Organisation.Name,
+                    Score = g
+                        .GroupBy(p => p.Event.Id)
+                        .Select(eventGroup => eventGroup
+                            .Select(part => part.Country.Id)
+                            .Distinct()
+                            .Count()
+                        )
+                        .Sum()
+                })
+                .OrderByDescending(p => p.Score)
+                .ToList();
+
+            foreach (var org in result)
+            {
+                Console.WriteLine($"{org.Organisation}: {org.Score}");
+            }
+
+
+            return await Task.FromResult(result);
+        }
+
 
 
 
@@ -81,6 +110,16 @@ namespace EventParticipation.Tests.Services
         public class CountryCollaborationDto
         {
             public string Country { get; set; } = string.Empty;
+            public double Score { get; set; }
+        }
+
+        public class OrganisationInflucenceDto
+        {
+            public string Organisation
+            {
+                get; set;
+            } = string.Empty;
+
             public double Score { get; set; }
         }
     }

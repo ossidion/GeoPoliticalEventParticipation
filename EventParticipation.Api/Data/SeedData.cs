@@ -31,20 +31,20 @@ namespace EventParticipation.Api.Data
             };
         }
 
-        public static List<Organization> GetOrganizations()
+        public static List<Organisation> GetOrganisations()
         {
-            return new List<Organization>
+            return new List<Organisation>
             {
-                new Organization { Id = 1, Name = "UNICEF", OrgType = "UN Agency" },
-                new Organization { Id = 2, Name = "WHO", OrgType = "UN Agency" },
-                new Organization { Id = 3, Name = "Red Cross", OrgType = "NGO" },
-                new Organization { Id = 4, Name = "FCDO", OrgType = "Government Department" },
-                new Organization { Id = 5, Name = "Amnesty International", OrgType = "NGO" },
-                new Organization { Id = 6, Name = "UNDP", OrgType = "UN Agency" },
-                new Organization { Id = 7, Name = "World Bank", OrgType = "IGO" },
-                new Organization { Id = 8, Name = "NATO", OrgType = "IGO" },
-                new Organization { Id = 9, Name = "Oxfam", OrgType = "NGO" },
-                new Organization { Id = 10, Name = "Médecins Sans Frontières", OrgType = "NGO" }
+                new Organisation { Id = 1, Name = "UNICEF", OrgType = "UN Agency" },
+                new Organisation { Id = 2, Name = "WHO", OrgType = "UN Agency" },
+                new Organisation { Id = 3, Name = "Red Cross", OrgType = "NGO" },
+                new Organisation { Id = 4, Name = "FCDO", OrgType = "Government Department" },
+                new Organisation { Id = 5, Name = "Amnesty International", OrgType = "NGO" },
+                new Organisation { Id = 6, Name = "UNDP", OrgType = "UN Agency" },
+                new Organisation { Id = 7, Name = "World Bank", OrgType = "IGO" },
+                new Organisation { Id = 8, Name = "NATO", OrgType = "IGO" },
+                new Organisation { Id = 9, Name = "Oxfam", OrgType = "NGO" },
+                new Organisation { Id = 10, Name = "Médecins Sans Frontières", OrgType = "NGO" }
             };
         }
 
@@ -102,7 +102,7 @@ namespace EventParticipation.Api.Data
 
         public static List<Participation> GenerateParticipations(
             List<Country> countries,
-            List<Organization> organizations,
+            List<Organisation> organizations,
             List<Event> events)
         {
             var rnd = new Random(42);
@@ -119,7 +119,7 @@ namespace EventParticipation.Api.Data
                     {
                         Id = idCounter++,
                         Country = countries[rnd.Next(countries.Count)],
-                        Organization = organizations[rnd.Next(organizations.Count)],
+                        Organisation = organizations[rnd.Next(organizations.Count)],
                         Event = ev
                     });
                 }

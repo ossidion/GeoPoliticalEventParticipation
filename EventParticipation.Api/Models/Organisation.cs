@@ -1,6 +1,6 @@
 ﻿namespace EventParticipation.Api.Models
 {
-    public class Organization
+    public class Organisation
     {
         public int Id { get; set; }
 

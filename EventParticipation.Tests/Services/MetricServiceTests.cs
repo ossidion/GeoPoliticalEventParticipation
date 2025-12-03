@@ -67,5 +67,17 @@ namespace EventParticipation.Tests.Services
             Assert.Equal(1, germany.Score);
         }
 
+        [Fact]
+        public async Task GetOrganisationInfluenceIndex_ReturnsCorrectScore()
+        {
+            var result = await _metricService.GetOrganisationInfluenceIndexAsync();
+
+            var org1 = result.First(r => r.Organisation == "WHO");
+            var org2 = result.First(r => r.Organisation == "UNICEF");
+
+            Assert.Equal(3, org1.Score);
+            Assert.Equal(2, org2.Score);
+
+        }
     }
 }

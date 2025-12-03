@@ -30,7 +30,7 @@ using (var scope = app.Services.CreateScope())
     if (!context.Participations.Any())
     {
         var countries = SeedData.GetCountries();
-        var organizations = SeedData.GetOrganizations();
+        var organizations = SeedData.GetOrganisations();
         var events = SeedData.GetEvents();
 
         var participations = SeedData.GenerateParticipations(countries, organizations, events);

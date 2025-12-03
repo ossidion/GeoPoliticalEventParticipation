@@ -16,13 +16,13 @@ namespace EventParticipation.Tests.Services
             };
         }
 
-        public static List<Organization> GetOrganizations()
+        public static List<Organisation> GetOrganisations()
         {
-            return new List<Organization>
+            return new List<Organisation>
             {
-                new Organization { Id = 1, Name = "UNICEF", OrgType = "UN Agency" },
-                new Organization { Id = 2, Name = "WHO", OrgType = "UN Agency" },
-                new Organization { Id = 3, Name = "Red Cross", OrgType = "NGO" },
+                new Organisation { Id = 1, Name = "UNICEF", OrgType = "UN Agency" },
+                new Organisation { Id = 2, Name = "WHO", OrgType = "UN Agency" },
+                new Organisation { Id = 3, Name = "Red Cross", OrgType = "NGO" },
             };
         }
 
@@ -39,17 +39,17 @@ namespace EventParticipation.Tests.Services
         public static List<Participation> GenerateParticipations()
         {
             var countries = GetCountries();
-            var organizations = GetOrganizations();
+            var organizations = GetOrganisations();
             var events = GetEvents();
 
             return new List<Participation>
             {
-                new Participation { Id = 1, Country = countries[0], Organization = organizations[0], Event = events[0] }, // UK - UNICEF - Global Health
-                new Participation { Id = 2, Country = countries[1], Organization = organizations[1], Event = events[0] }, // France - WHO - Global Health
-                new Participation { Id = 3, Country = countries[0], Organization = organizations[1], Event = events[1] }, // UK - WHO - Climate
-                new Participation { Id = 4, Country = countries[2], Organization = organizations[2], Event = events[1] }, // Germany - Red Cross - Climate
-                new Participation { Id = 5, Country = countries[1], Organization = organizations[0], Event = events[2] }, // France - UNICEF - Peace
-                new Participation { Id = 6, Country = countries[2], Organization = organizations[1], Event = events[2] }, // Germany - WHO - Peace
+                new Participation { Id = 1, Country = countries[0], Organisation = organizations[0], Event = events[0] }, // UK - UNICEF - Global Health
+                new Participation { Id = 2, Country = countries[1], Organisation = organizations[1], Event = events[0] }, // France - WHO - Global Health
+                new Participation { Id = 3, Country = countries[0], Organisation = organizations[1], Event = events[1] }, // UK - WHO - Climate
+                new Participation { Id = 4, Country = countries[2], Organisation = organizations[2], Event = events[1] }, // Germany - Red Cross - Climate
+                new Participation { Id = 5, Country = countries[1], Organisation = organizations[0], Event = events[2] }, // France - UNICEF - Peace
+                new Participation { Id = 6, Country = countries[2], Organisation = organizations[1], Event = events[2] }, // Germany - WHO - Peace
             };
         }
     }

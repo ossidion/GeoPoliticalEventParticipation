@@ -42,7 +42,7 @@ namespace EventParticipation.Api.Services
                 {
                     Event = g.Key,
                     UniqueCountries = g.Select(p => p.Country.Name).Distinct().Count(),
-                    UniqueOrganizations = g.Select(p => p.Organization.Name).Distinct().Count()
+                    UniqueOrganizations = g.Select(p => p.Organisation.Name).Distinct().Count()
                 })
                 .ToListAsync();
         }
