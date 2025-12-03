@@ -29,7 +29,12 @@ using (var scope = app.Services.CreateScope())
 
     if (!context.Participations.Any())
     {
-        var participations = SeedData.GetParticipations();
+        var countries = SeedData.GetCountries();
+        var organizations = SeedData.GetOrganizations();
+        var events = SeedData.GetEvents();
+
+        var participations = SeedData.GenerateParticipations(countries, organizations, events);
+
         context.Participations.AddRange(participations);
         context.SaveChanges();
     }

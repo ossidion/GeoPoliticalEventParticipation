@@ -36,7 +36,7 @@ namespace EventParticipation.Tests.Services
             };
         }
 
-        public static List<Participation> GetParticipations()
+        public static List<Participation> GenerateParticipations()
         {
             var countries = GetCountries();
             var organizations = GetOrganizations();
