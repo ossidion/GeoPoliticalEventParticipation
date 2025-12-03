@@ -8,12 +8,26 @@ namespace EventParticipation.Api.Data
         {
             return new List<Country>
             {
-                new Country { Id = 1, Name = "United Kingdom" },
-                new Country { Id = 2, Name = "France" },
-                new Country { Id = 3, Name = "Germany" },
-                new Country { Id = 4, Name = "United States" },
-                new Country { Id = 5, Name = "Canada" },
-                new Country { Id = 6, Name = "Australia" }
+                new Country { Id = 1, Name = "United Kingdom", Region = "Europe", GDP = 3100, Population = 68 },
+                new Country { Id = 2, Name = "France", Region = "Europe", GDP = 2800, Population = 65 },
+                new Country { Id = 3, Name = "Germany", Region = "Europe", GDP = 4200, Population = 83 },
+                new Country { Id = 4, Name = "United States", Region = "North America", GDP = 21000, Population = 331 },
+                new Country { Id = 5, Name = "Canada", Region = "North America", GDP = 1800, Population = 38 },
+                new Country { Id = 6, Name = "Australia", Region = "Oceania", GDP = 1400, Population = 25 },
+                new Country { Id = 7, Name = "Japan", Region = "Asia", GDP = 5000, Population = 126 },
+                new Country { Id = 8, Name = "India", Region = "Asia", GDP = 2900, Population = 1380 },
+                new Country { Id = 9, Name = "China", Region = "Asia", GDP = 14700, Population = 1440 },
+                new Country { Id = 10, Name = "Brazil", Region = "South America", GDP = 2200, Population = 213 },
+                new Country { Id = 11, Name = "South Africa", Region = "Africa", GDP = 350, Population = 60 },
+                new Country { Id = 12, Name = "Nigeria", Region = "Africa", GDP = 450, Population = 206 },
+                new Country { Id = 13, Name = "Kenya", Region = "Africa", GDP = 110, Population = 54 },
+                new Country { Id = 14, Name = "Mexico", Region = "North America", GDP = 1300, Population = 129 },
+                new Country { Id = 15, Name = "Spain", Region = "Europe", GDP = 1400, Population = 47 },
+                new Country { Id = 16, Name = "Italy", Region = "Europe", GDP = 2100, Population = 60 },
+                new Country { Id = 17, Name = "Norway", Region = "Europe", GDP = 450, Population = 5 },
+                new Country { Id = 18, Name = "Sweden", Region = "Europe", GDP = 630, Population = 10 },
+                new Country { Id = 19, Name = "Turkey", Region = "Asia", GDP = 820, Population = 84 },
+                new Country { Id = 20, Name = "South Korea", Region = "Asia", GDP = 1700, Population = 52 }
             };
         }
 
@@ -21,39 +35,96 @@ namespace EventParticipation.Api.Data
         {
             return new List<Organization>
             {
-                new Organization { Id = 1, Name = "UNICEF" },
-                new Organization { Id = 2, Name = "WHO" },
-                new Organization { Id = 3, Name = "Red Cross" },
-                new Organization { Id = 4, Name = "FCDO" },
-                new Organization { Id = 5, Name = "Amnesty International" }
+                new Organization { Id = 1, Name = "UNICEF", OrgType = "UN Agency" },
+                new Organization { Id = 2, Name = "WHO", OrgType = "UN Agency" },
+                new Organization { Id = 3, Name = "Red Cross", OrgType = "NGO" },
+                new Organization { Id = 4, Name = "FCDO", OrgType = "Government Department" },
+                new Organization { Id = 5, Name = "Amnesty International", OrgType = "NGO" },
+                new Organization { Id = 6, Name = "UNDP", OrgType = "UN Agency" },
+                new Organization { Id = 7, Name = "World Bank", OrgType = "IGO" },
+                new Organization { Id = 8, Name = "NATO", OrgType = "IGO" },
+                new Organization { Id = 9, Name = "Oxfam", OrgType = "NGO" },
+                new Organization { Id = 10, Name = "Médecins Sans Frontières", OrgType = "NGO" }
             };
         }
 
-        public static List<Event> GetEvents()
+        public static List<Event> GetEvents(int count = 30)
         {
-            return new List<Event>
+            var rnd = new Random(42);
+
+            var eventNames = new[]
             {
-                new Event { Id = 1, Name = "Global Health Summit" },
-                new Event { Id = 2, Name = "Climate Action Forum" },
-                new Event { Id = 3, Name = "Peace and Security Conference" }
+                "Global Health Security Conference",
+                "Climate Resilience Summit",
+                "Humanitarian Coordination Forum",
+                "Cybersecurity and Digital Governance Expo",
+                "International Peace and Stability Dialogue",
+                "Refugee and Migration Roundtable",
+                "Sustainable Development Partnership Forum",
+                "Arctic Security Cooperation Meeting",
+                "Indo-Pacific Strategic Dialogue",
+                "Global Water Security Symposium",
+                "Energy Transition Summit",
+                "African Economic Partnership Forum",
+                "Economic Recovery and Reconstruction Conference",
+                "Food Security and Agriculture Innovation Forum",
+                "Women, Peace & Security Congress",
+                "Anti-Corruption and Transparency Forum",
+                "Disaster Response Coordination Workshop",
+                "Counter-Terrorism Cooperation Meeting",
+                "International Education and Development Forum",
+                "Global Trade and Investment Summit",
+                "Maritime Security and Anti-Piracy Conference",
+                "Human Rights Dialogue",
+                "Multilateral Aid Effectiveness Roundtable",
+                "International Health Workforce Congress",
+                "Digital Transformation and AI Ethics Forum",
+                "Urban Resilience and Infrastructure Summit"
             };
+
+            string[] categories = { "Security", "Climate", "Health", "Trade", "Humanitarian", "Development", "Digital" };
+
+            var selected = eventNames.OrderBy(_ => rnd.Next()).Take(count).ToList();
+            var list = new List<Event>();
+
+            for (int i = 0; i < selected.Count; i++)
+            {
+                list.Add(new Event
+                {
+                    Id = i + 1,
+                    Name = selected[i],
+                    Date = DateTime.UtcNow.AddDays(-rnd.Next(50, 1500)),
+                    Category = categories[rnd.Next(categories.Length)]
+                });
+            }
+            return list;
         }
 
-        public static List<Participation> GetParticipations()
+        public static List<Participation> GenerateParticipations(
+            List<Country> countries,
+            List<Organization> organizations,
+            List<Event> events)
         {
-            var countries = GetCountries();
-            var organizations = GetOrganizations();
-            var events = GetEvents();
+            var rnd = new Random(42);
+            var participations = new List<Participation>();
+            int idCounter = 1;
 
-            return new List<Participation>
+            foreach (var ev in events)
             {
-                new Participation { Id = 1, Country = countries[0], Organization = organizations[0], Event = events[0] }, // UK - UNICEF - Global Health Summit
-                new Participation { Id = 2, Country = countries[1], Organization = organizations[1], Event = events[0] }, // France - WHO - Global Health Summit
-                new Participation { Id = 3, Country = countries[2], Organization = organizations[2], Event = events[1] }, // Germany - Red Cross - Climate Action Forum
-                new Participation { Id = 4, Country = countries[0], Organization = organizations[1], Event = events[1] }, // UK - WHO - Climate Action Forum
-                new Participation { Id = 5, Country = countries[3], Organization = organizations[3], Event = events[2] }, // USA - FCDO - Peace and Security Conference
-                new Participation { Id = 6, Country = countries[1], Organization = organizations[0], Event = events[2] }  // France - UNICEF - Peace and Security Conference
-            };
+                int count = rnd.Next(5, 20); // 5–20 participations per event
+
+                for (int i = 0; i < count; i++)
+                {
+                    participations.Add(new Participation
+                    {
+                        Id = idCounter++,
+                        Country = countries[rnd.Next(countries.Count)],
+                        Organization = organizations[rnd.Next(organizations.Count)],
+                        Event = ev
+                    });
+                }
+            }
+            return participations;
         }
     }
 }
