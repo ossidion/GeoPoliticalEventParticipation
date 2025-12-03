@@ -80,4 +80,32 @@ namespace EventParticipation.Tests.Services
 
         }
     }
+
+    public class MetricServiceTrendTests
+    {
+        private readonly List<Participation> _trendParticipations;
+        private readonly MetricServiceFake _metricService;
+
+        public MetricServiceTrendTests()
+        {
+            _trendParticipations = TestData.GenerateTrendParticipations();
+            _metricService = new MetricServiceFake(_trendParticipations);
+        }
+
+        [Fact]
+        public async Task GetCountryEmergingTrend_ReturnsCorrectTrend()
+        {
+            // change to date time now and datetime now minus one year.
+            var windowStart = new DateTime(2024, 12, 3);
+            var windowEnd = new DateTime(2025, 12, 2);
+
+            var result = await _metricService.GetCountryEmergingTrendAsync(windowStart, windowEnd);
+
+            var uk = result.First(r => r == "United Kingdom");
+            var france = result.First(r => r == "France");
+
+            Assert.Equal(-0.5, uk.TrendScore);
+            Assert.Equal(1.0, france.TrendScore);
+        }
+    }
 }

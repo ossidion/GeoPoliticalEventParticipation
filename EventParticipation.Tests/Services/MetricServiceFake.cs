@@ -78,12 +78,6 @@ namespace EventParticipation.Tests.Services
                 .OrderByDescending(p => p.Score)
                 .ToList();
 
-            foreach (var org in result)
-            {
-                Console.WriteLine($"{org.Organisation}: {org.Score}");
-            }
-
-
             return await Task.FromResult(result);
         }
 
@@ -121,6 +115,14 @@ namespace EventParticipation.Tests.Services
             } = string.Empty;
 
             public double Score { get; set; }
+        }
+
+        public class CountryTrendDto
+        {
+            public string Country { get; set; } = string.Empty; 
+            public int CurrentPeriodCount { get; set; }
+            public int PreviousPeriodCount { get; set; }
+            public double TrendScore { get; set; }
         }
     }
 }

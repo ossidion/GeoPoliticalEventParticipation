@@ -52,5 +52,43 @@ namespace EventParticipation.Tests.Services
                 new Participation { Id = 6, Country = countries[2], Organisation = organizations[1], Event = events[2] }, // Germany - WHO - Peace
             };
         }
+
+        // Trend test data
+
+        public static List<Event> GetTrendEvents()
+        {
+            return new List<Event>
+            {
+            // Previous period (2023)
+            new Event { Id = 101, Name = "Global Health Summit 2023", Date = new DateTime(2023, 1, 15), Category = "Health" },
+            new Event { Id = 102, Name = "Climate Action Forum 2023", Date = new DateTime(2023, 6, 10), Category = "Climate" },
+            new Event { Id = 103, Name = "Peace Conference 2023", Date = new DateTime(2023, 11, 5), Category = "Security" },
+
+            // Current period (2024)
+            new Event { Id = 104, Name = "Sustainable Energy Forum 2024", Date = new DateTime(2024, 2, 20), Category = "Energy" },
+            new Event { Id = 105, Name = "Global Health Update 2024", Date = new DateTime(2024, 5, 15), Category = "Health" },
+            new Event { Id = 106, Name = "Peace and Security Summit 2024", Date = new DateTime(2024, 9, 10), Category = "Security" },
+            };
+        }
+
+        public static List<Participation> GenerateTrendParticipations()
+        {
+            var countries = TestData.GetCountries();
+            var organizations = TestData.GetOrganisations();
+            var events = GetTrendEvents();
+
+            return new List<Participation>
+            {
+            // Previous period (2023)
+            new Participation { Id = 101, Country = countries[0], Organisation = organizations[0], Event = events[0] }, // UK
+            new Participation { Id = 102, Country = countries[0], Organisation = organizations[1], Event = events[1] }, // UK
+            new Participation { Id = 103, Country = countries[1], Organisation = organizations[0], Event = events[2] }, // France
+
+            // Current period (2024)
+            new Participation { Id = 104, Country = countries[0], Organisation = organizations[1], Event = events[3] }, // UK
+            new Participation { Id = 105, Country = countries[1], Organisation = organizations[0], Event = events[4] }, // France
+            new Participation { Id = 106, Country = countries[1], Organisation = organizations[1], Event = events[5] }, // France
+            };
+        }
     }
 }
