@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using EventParticipation.Api.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace EventParticipation.Tests.Services
 {
@@ -59,7 +61,7 @@ namespace EventParticipation.Tests.Services
             return Task.FromResult(result);
         }
 
-        internal async Task<List<OrganisationInflucenceDto>> GetOrganisationInfluenceIndexAsync()
+        public async Task<List<OrganisationInflucenceDto>> GetOrganisationInfluenceIndexAsync()
         {
             var result = _participations
                 .GroupBy(p => p.Organisation.Id)
@@ -81,48 +83,73 @@ namespace EventParticipation.Tests.Services
             return await Task.FromResult(result);
         }
 
-
-
-
-
-        // -------------------------------
-        // DTOs for testing
-        // -------------------------------
-        public class CountryParticipationDto
+        public async Task<List<CountryTrendDto>> GetCountryEmergingTrendAsync(DateTime windowStart, DateTime windowEnd)
         {
-            public string Country { get; set; } = string.Empty;
-            public int Count { get; set; }
-        }
+            var result = _participations
+                .GroupBy(p => p.Country.Name)
+                .Select(g =>
+                {
+                    var previousCount = g.Count(p => p.Event.Date < windowStart);
+                    var currentCount = g.Count(p => p.Event.Date >= windowStart && p.Event.Date <= windowEnd);
+                    var totalCount = g.Count();
+                    var trendScore = ((double)currentCount / totalCount - ((double)previousCount / totalCount)); // Normalise
 
-        public class EventParticipationReachDto
+                    return new CountryTrendDto
+                    {
+                        Country = g.Key,
+                        CurrentPeriodCount = currentCount,
+                        PreviousPeriodCount = previousCount,
+                        TrendScore = trendScore
+                    };
+                })
+                .OrderByDescending(p => p.TrendScore)
+                .ToList();
+
+            return await Task.FromResult(result);
+        }
+    }
+
+
+
+
+
+    // -------------------------------
+    // DTOs for testing
+    // -------------------------------
+    public class CountryParticipationDto
+    {
+        public string Country { get; set; } = string.Empty;
+        public int Count { get; set; }
+    }
+
+    public class EventParticipationReachDto
+    {
+        public string Event { get; set; } = string.Empty;
+        public int UniqueCountries { get; set; }
+        public int UniqueOrganizations { get; set; }
+    }
+
+    public class CountryCollaborationDto
+    {
+        public string Country { get; set; } = string.Empty;
+        public double Score { get; set; }
+    }
+
+    public class OrganisationInflucenceDto
+    {
+        public string Organisation
         {
-            public string Event { get; set; } = string.Empty;
-            public int UniqueCountries { get; set; }
-            public int UniqueOrganizations { get; set; }
-        }
+            get; set;
+        } = string.Empty;
 
-        public class CountryCollaborationDto
-        {
-            public string Country { get; set; } = string.Empty;
-            public double Score { get; set; }
-        }
+        public double Score { get; set; }
+    }
 
-        public class OrganisationInflucenceDto
-        {
-            public string Organisation
-            {
-                get; set;
-            } = string.Empty;
-
-            public double Score { get; set; }
-        }
-
-        public class CountryTrendDto
-        {
-            public string Country { get; set; } = string.Empty; 
-            public int CurrentPeriodCount { get; set; }
-            public int PreviousPeriodCount { get; set; }
-            public double TrendScore { get; set; }
-        }
+    public class CountryTrendDto
+    {
+        public string Country { get; set; } = string.Empty;
+        public int CurrentPeriodCount { get; set; }
+        public int PreviousPeriodCount { get; set; }
+        public double TrendScore { get; set; }
     }
 }

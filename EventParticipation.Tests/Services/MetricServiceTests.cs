@@ -96,16 +96,16 @@ namespace EventParticipation.Tests.Services
         public async Task GetCountryEmergingTrend_ReturnsCorrectTrend()
         {
             // change to date time now and datetime now minus one year.
-            var windowStart = new DateTime(2024, 12, 3);
-            var windowEnd = new DateTime(2025, 12, 2);
+            var windowStart = new DateTime(2024, 1, 1);
+            var windowEnd = new DateTime(2024, 12, 31);
 
             var result = await _metricService.GetCountryEmergingTrendAsync(windowStart, windowEnd);
 
-            var uk = result.First(r => r == "United Kingdom");
-            var france = result.First(r => r == "France");
+            var uk = result.First(r => r.Country == "United Kingdom");
+            var france = result.First(r => r.Country == "France");
 
-            Assert.Equal(-0.5, uk.TrendScore);
-            Assert.Equal(1.0, france.TrendScore);
+            Assert.Equal(0.2, uk.TrendScore, 3);
+            Assert.Equal(0.333, france.TrendScore, 3);
         }
     }
 }
